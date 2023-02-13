@@ -23,6 +23,7 @@ int toDec(char *);
 
 #define MAX_NUM 30
 #define MINUS 2147483648
+#define S21_MAX_UINT 4294967296
 
 // #define OK 0
 // #define LARGE_OR_EQ_INF 1
@@ -83,6 +84,13 @@ int s21_from_int_to_decimal(int src, s21_decimal *dst);
 int s21_from_decimal_to_int(s21_decimal src, int *dst);
 int s21_from_float_to_decimal(float src, s21_decimal *dst);
 int s21_from_decimal_to_float(s21_decimal src, float *dst);
+
+int s21_add(s21_decimal value_1, s21_decimal value_2, s21_decimal *result);
+int s21_sub(s21_decimal value_1, s21_decimal value_2, s21_decimal *result);
+
 int s21_negate(s21_decimal, s21_decimal*);
+int s21_truncate(s21_decimal value, s21_decimal *result);
+int s21_round (s21_decimal value, s21_decimal *result);
+
 
 #endif  //  SRC_S21_DECIMAL_H_
