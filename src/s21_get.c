@@ -14,16 +14,8 @@ int getScale(s21_decimal num) {
     return num.bits[3] >> 16u;
 }
 
-int getSignFloat(int num) {
-    return !(!(num & 1u << 31));
-}
-
-int getScaleFloat(int num) {
-    setSignFloat(&num, 0);
-    return (num >> 23u);
-}
-
-int getBitFloat(int num, int i) {
-    unsigned int mask = 1u << i;
-    return !(!(num & mask));
+int getMajorBit(s21_decimal num) {
+    for (int i = 95; i >=0;i--)
+    if (getBit(num, i)) return i;
+    return -1;
 }

@@ -1,0 +1,6 @@
+#include "s21_decimal.h"
+
+#test eq
+s21_decimal a = {{1,0,0,0}}, b = {{1,0,0,0}};
+
+ck_assert_int_eq (s21_is_less(a,b), FALSE);

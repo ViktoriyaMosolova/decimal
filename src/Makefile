@@ -1,36 +1,43 @@
+CFLAGS = -Wall -Wextra -Werror -pedantic -std=c11
+GCOVFLAGS = --coverage 
+TEST_FLAGS = -lm -lcheck
+
+HEADER = s21_decimal.h 
+SOURCES_ALL = $(wildcard *.c)
+
 ifeq ($(shell uname -s), Linux)	
-	LFLAG += -lpthread -lrt -lm -lsubunit
+	FLAGS += -lpthread -lrt -lm -lsubunit
 endif
 
+OBJ_LIBRARY := $(patsubst %.c, %.o, $(SOURCES_ALL))
+
+%.o: %.c $(HEADER)
+	gcc $(CFLAGS) -c $< -o $@
+
 all: s21_decimal.a
-
-s21_decimal.a:
-	gcc -Wall -Wextra -Werror -std=c11 -c s21_*.c
-	ar rc s21_decimal.a s21_*.o
-	ranlib s21_decimal.a
-
-test: clean s21_decimal.a 
-#	gcc main.c -o main s21_decimal.a -lcheck $(LFLAG)
-#	./main
-	gcc Test_function/Test.c Test_function/Convertors/*.c -o test s21_decimal.a -lcheck $(LFLAG)
+	gcc *.c *.a -o test
 	./test
 
-gcov_report:	
-	gcc s21_*.c TEST.c -lcheck -o gcov_report --coverage $(LFLAG)
-	./gcov_report
-	rm -rf *TEST*.gc*
-	gcov *s21_*.c 
-	lcov -d . -o gcov_report.info -c
-	genhtml -o report gcov_report.info
-	open report/index.html
+test: 
+	make s21_decimal.a
+	gcc -g *.c *.a -o test
+	#gdb ./test
+	lldb ./test
+
+s21_decimal.a: $(OBJ_LIBRARY)  $(HEADER)
+	ar rcs s21_decimal.a $(OBJ_LIBRARY)
+	ranlib s21_decimal.a
+	rm -f *.o
+
+#test: clean s21_decimal.a
+#	gcc $(CFLAGS) s21_decimal.c s21_decimal.a -o test -lm -lcheck $(FLAGS)
+#	./test
+#	rm test
+
 
 check:
-	clang-format -style=Google -i *.c *.h
-	clang-format -style=Google -n *.c *.h
-
-leak_style: test
-	leaks -atExit -- ./test
-	clang-format -n -style=Google *s21_*.c TEST.c
+	clang-format -style=Google -n *.c
+	clang-format -style=Google -n *.c
 
 rebuild: clean all
 
@@ -39,8 +46,6 @@ clean:
 	rm -f *.o *.a
 	rm -rf report
 	rm -f *.out
-	rm -f test
-	rm -f gcov_report
-	rm -f main
-
+	rm test
+cflag = -Wall -Werror -Wextra -std=c11
 

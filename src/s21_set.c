@@ -25,17 +25,7 @@ void setScale(s21_decimal* num, unsigned int result) {
     if(flag) { setSign(num, 1); }
 }
 
-void setSignFloat(int *num, int sign) {
-    if (sign == 1) {
-        *num |= 1u << 31;
-    } else {
-        *num &= ~(1u << 31);
-    }
-}
-
-void setScaleFloat(int* num, int result) {
-    int flag = 0;
-    if(getSignFloat(*num)) { flag = 1; }
-    *num = result << 23u;
-    if(flag) { setSignFloat(num, 1); }
+void init(s21_decimal* a) {
+  for (int i = 0; i < 96; i++)
+    setBit(a, i, 0);
 }

@@ -1,4 +1,29 @@
 #include "s21_decimal.h"
+#define aa 5
+#define bb 5
+
+
+int main() {
+    s21_decimal a = {{aa,0,0,0}}, b = {{bb,0,0,0}}, rez={0};
+    //int sign =0;
+    //setSign(&a,sign); setSign(&b,sign);
+    //setScale(&a, 11); setScale(&b, 10);
+    printDecAndBin(a); printDecAndBin(b);
+    printf("\n");
+    //printf("start\n");
+    //printf("%d %d\n", getMajorBit(a), getMajorBit(b));
+    //s21_decimal ost = div_int(a, b, &rez);
+    mult_div(a,b,&rez);
+    //s21_add(a,b,&rez);
+    //s21_sub(a,b,&rez);
+    //printf("rezolt\n");
+    printDecAndBin(rez);//  printDecAndBin(ost);
+    printf("%d\n", aa*bb);
+    
+    //if (s21_is_less(a,b)) printf("a less b\n");
+    //else printf("FALSE\n");
+    return 0;
+}
 
 char* printBin(s21_decimal num) {
     char *number = (char*)calloc(97, sizeof(char));
@@ -15,12 +40,12 @@ char* printBin(s21_decimal num) {
     //printf("bits[0] - %s\n", str1);
     strcat(number, str1); free(str1);
 
-    //printf("binary  -> %-10s\n", number);
+    printf("binary  -> %-10s\n", number);
 
     return number;
 }
 
-/*void printDecAndBin(s21_decimal num) {
+void printDecAndBin(s21_decimal num) {
 
     char rez[MAX_NUM+1] = "";
     char* ptr = NULL;
@@ -29,17 +54,17 @@ char* printBin(s21_decimal num) {
     coup(number);
 
     char *str4 = toBinary(num.bits[3]);
-    printf("bits[3] -> %-10s\n", str4);
-    if (str4[0] == '1')   printf("sign    -> -\n");
+    //printf("bits[3] -> %-10s\n", str4);
+    /*if (str4[0] == '1')   printf("sign    -> -\n");
        else printf("sign    -> +\n");
     char step[10] = {0};
     int j = 0;
     for (int i = 8; i <= 15; i++) {
         step[j] = str4[i]; j++;
-    }
+    }*/
     free(str4);
     //printf("bin step - %s\n", step);
-    int mant = toDec(step);
+    int mant = getScale(num);
     for (int i = 0; i < (int)strlen(number); i++) {
         if (i == 0 && number[i] == '1') {
             rez[0] = '1';
@@ -71,100 +96,19 @@ char* printBin(s21_decimal num) {
         coup(new_rez);
     } else if (mant == (int)strlen(rez)) {
         coup(new_rez);
-        for (int i = 0; i < MAX_NUM; i++) {
-            if (i == mant )
-                new_rez[i] = ',';
-            else if (i > mant)
-                new_rez[i] = rez[i-mant-1];
-            else
-                new_rez[i] = '0';
-        }
-    } else {
-        for (int i = 0; i < MAX_NUM; i++) {
-
-            if (i >= (int)strlen(rez) && i < mant)
-                new_rez[i] = '0';
-            else if (i == mant)
-                new_rez[i] = ',';
-            else if (i > mant) {
-                new_rez[i] = '0';
-                break;              //added break - extra 0s before ','
-            } else
-                new_rez[i] = rez[i];
-
-        }
-        coup(new_rez);
-    }
-
-    printf("dec     -> %s \n", new_rez);
-}*/
-
-void printDecAndBin(s21_decimal num) {
-
-    char *ptr = NULL;
-    char rez[40] = {'\0'};
-    char stepen[40] = {'\0'};
-    char *number = printBin(num);
-
-    char *str4 = toBinary(num.bits[3]);
-    coup(number);
-    //printf("bits[3] -> %-10s\n", str4);
-    //if (str4[0] == '1')   printf("sign    -> -\n");
-       //else printf("sign    -> +\n");
-    char step[10] = {'\0'};
-    for (int i = 8, j = 0; i <= 15; i++, j++) {
-        step[j] = str4[i];
-    }
-    //printf("step -> %-10s\n", step);
-    free(str4);
-    //printf("bin step - %s\n", step);
-
-    for (int i = 0; i < (int)strlen(number); i++) {
-        if (i == 0 && number[i] == '1') {
-            rez[0] = '1';
-            continue;
-        }
-        if (number[i] == '1') {
-            ptr = powTwo(i);
-            strcpy(stepen, ptr);
-            free(ptr);
-
-            ptr = additionString(rez, stepen);
-            strcpy(rez, ptr);
-            free(ptr);
-        }
-    }
-    //printf("step - %s -> rez-> %s\n", stepen, rez);
-    free(number); 
-    
-    coup(rez);
-
-    //printf("len - %d <> rez - %s \n", (int)strlen(rez), rez);
-    char new_rez[40] = "";
-    int mant = toDec(step);
-    printf("mant - %d <> strlen rez - %d \n", mant, (int)strlen(rez));
-    if (mant < (int)strlen(rez)) {
-        for (int i = 0; i < 40; i++) {
-            if (i == mant )
-                new_rez[i] = ',';
-            else if (i > mant)
-                new_rez[i] = rez[i-1];
-            else
-                new_rez[i] = rez[i];
-        }
-        coup(new_rez);
-    } else if (mant == (int)strlen(rez)) {
         coup(rez);
-        for (int i = 0; i < 40; i++) {
-            if (i == mant)
-                new_rez[i] = ',';
+        for (int i = mant-1; i < MAX_NUM; i++) {
+            if (i == mant )
+                new_rez[i-mant+1] = ',';
             else if (i > mant)
-                new_rez[i] = rez[i-mant-1];
+                new_rez[i-mant+1] = rez[i-mant-1];
             else
-                new_rez[i] = '0';
+                new_rez[i-mant+1] = '0';
         }
+        coup(rez);
     } else {
-        for (int i = 0; i < 40; i++) {
+        for (int i = 0; i < MAX_NUM; i++) {
+
             if (i >= (int)strlen(rez) && i < mant)
                 new_rez[i] = '0';
             else if (i == mant)
@@ -174,6 +118,7 @@ void printDecAndBin(s21_decimal num) {
                 break;              //added break - extra 0s before ','
             } else
                 new_rez[i] = rez[i];
+
         }
         coup(new_rez);
     }
@@ -241,14 +186,12 @@ char* additionString(char* a, char* b) {
 
 void coup(char* tex) {
     int len = strlen(tex);
-    char *new_tex = calloc(len + 1, sizeof(char));
-
+    char *new_tex = calloc(len + 1, 1);
     for (int i = 0; i < len; i++) {
         new_tex[i] = tex[len - i - 1];
     }
     for (int i = 0; i < len; i++) {
         tex[i] = new_tex[i];
-       // printf("%c", tex[i]);
     }
     free(new_tex);
 }
@@ -284,10 +227,10 @@ char* multiplicationString(char *a, char *b) {
 
 int toDec(char *bin) {
     coup(bin);
-    char rez[40] = {'\0'};
-    char stepen[40] = {'\0'};
     int len = strlen(bin);
+    char rez[MAX_NUM+1] = "";
     char* ptr = NULL;
+    char stepen[MAX_NUM+1];
 
     for (int i = 0; i < len; i++) {
         if (i == 0 && bin[i] == '1') {
@@ -305,6 +248,6 @@ int toDec(char *bin) {
             //printf("%d - step - %s -> rez-> %s\n", i, stepen, rez);
         }
     }
-    //printf("scale   -> 10^%s \n", rez);
+   // printf("scale   -> 10^%s \n", rez);
     return atoi(rez);
 }
