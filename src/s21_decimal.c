@@ -1,20 +1,23 @@
 #include "s21_decimal.h"
-#define aa 5
-#define bb 5
+#define aa 56468490
+#define bb 10
 
 
 int main() {
-    s21_decimal a = {{aa,0,0,0}}, b = {{bb,0,0,0}}, rez={0};
+    s21_decimal a = {{aa,0,0,0}},  rez={0};
     //int sign =0;
     //setSign(&a,sign); setSign(&b,sign);
     //setScale(&a, 11); setScale(&b, 10);
-    printDecAndBin(a); printDecAndBin(b);
+    printDecAndBin(a);// printDecAndBin(b);
     printf("\n");
     //printf("start\n");
     //printf("%d %d\n", getMajorBit(a), getMajorBit(b));
     //s21_decimal ost = div_int(a, b, &rez);
-    mult_div(a,b,&rez);
+    //mult_div(a,b,&rez);
+    div_ten(a, &rez);
     //s21_add(a,b,&rez);
+    //a.bits[0] = 3;
+    //s21_add(a,rez,&rez);
     //s21_sub(a,b,&rez);
     //printf("rezolt\n");
     printDecAndBin(rez);//  printDecAndBin(ost);
@@ -86,8 +89,9 @@ void printDecAndBin(s21_decimal num) {
     char new_rez[MAX_NUM+1] = "";
     if (mant < (int)strlen(rez)) {
         for (int i = 0; i < MAX_NUM; i++) {
-            if (i == mant )
-                new_rez[i] = ',';
+            if (i == mant){
+                    new_rez[i] = '.';
+            }
             else if (i > mant)
                 new_rez[i] = rez[i-1];
             else
@@ -99,7 +103,7 @@ void printDecAndBin(s21_decimal num) {
         coup(rez);
         for (int i = mant-1; i < MAX_NUM; i++) {
             if (i == mant )
-                new_rez[i-mant+1] = ',';
+                new_rez[i-mant+1] = '.';
             else if (i > mant)
                 new_rez[i-mant+1] = rez[i-mant-1];
             else
@@ -112,7 +116,7 @@ void printDecAndBin(s21_decimal num) {
             if (i >= (int)strlen(rez) && i < mant)
                 new_rez[i] = '0';
             else if (i == mant)
-                new_rez[i] = ',';
+                new_rez[i] = '.';
             else if (i > mant) {
                 new_rez[i] = '0';
                 break;              //added break - extra 0s before ','
