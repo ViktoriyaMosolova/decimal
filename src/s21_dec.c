@@ -95,4 +95,31 @@ void mult_ten(s21_decimal *a) {
     shift_decimal(&tmp2, 1);
     s21_add(tmp, tmp2 , a);
 }
+int getMajorMax(s21_decimal a, s21_decimal b) {
+    int majorA = getMajorBit(a), majorB = getMajorBit(b);
+    int majorMax;
+    if (majorA > majorB) majorMax = majorA;
+    else majorMax = majorB;
+    return majorMax;
+}
+
+void cast_scale(s21_decimal *a, s21_decimal *b) {
+    int scale_a = getScale(*a);
+    int scale_b = getScale(*b);
+    int scale_cast;
+    while (scale_a != scale_b){
+        if (getMajorMax(*a,*b)+3 > 96) {
+            if (scale_a > scale_b) div_ten(a), scale_a--;
+            else div_ten(b), scale_b--;
+        } else {
+            if (scale_a > scale_b) mult_ten(b), scale_b++;
+            else mult_ten(a), scale_a++;
+        }
+    }
+    printDecAndBin(*a);printDecAndBin(*b);
+    scale_cast = scale_a;
+    setScale(a, scale_cast);
+    setScale(b, scale_cast);
+    
+}
 

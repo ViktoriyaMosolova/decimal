@@ -68,6 +68,8 @@ int sub_for_poz(s21_decimal a, s21_decimal b, s21_decimal* result);
 s21_decimal div_int(s21_decimal a, s21_decimal b, s21_decimal* c);
 void div_ten(s21_decimal *a) ;
 void division(s21_decimal a, s21_decimal b, s21_decimal* c);
+void cast_scale(s21_decimal *a, s21_decimal *b);
+
 char* toBinary(int n);
 char* additionString(char* a, char* b);
 void coup(char* tex);
