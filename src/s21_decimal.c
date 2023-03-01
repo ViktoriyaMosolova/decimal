@@ -1,10 +1,10 @@
 #include "s21_decimal.h"
-#define aa 56468490
-#define bb 10
+#define aa 100
+#define bb 3
 
 
 int main() {
-    s21_decimal a = {{aa,0,0,0}},  rez={0};
+    s21_decimal a = {{aa,0,0,0}}, b={{bb,0,0,0}}, rez={0};
     //int sign =0;
     //setSign(&a,sign); setSign(&b,sign);
     //setScale(&a, 11); setScale(&b, 10);
@@ -14,15 +14,19 @@ int main() {
     //printf("%d %d\n", getMajorBit(a), getMajorBit(b));
     //s21_decimal ost = div_int(a, b, &rez);
     //mult_div(a,b,&rez);
-    div_ten(a, &rez);
+    division(a,b,&rez);
+    //mult_ten(&a);
     //s21_add(a,b,&rez);
     //a.bits[0] = 3;
     //s21_add(a,rez,&rez);
     //s21_sub(a,b,&rez);
     //printf("rezolt\n");
     printDecAndBin(rez);//  printDecAndBin(ost);
-    printf("%d\n", aa*bb);
-    
+    printf("%lf\n", aa/(double)(bb));
+    //printf("%d\n", ammount_digit(a));
+    s21_decimal tmp = {{1,0,0,0}};
+    div_ten(&tmp);
+    printDecAndBin(tmp);
     //if (s21_is_less(a,b)) printf("a less b\n");
     //else printf("FALSE\n");
     return 0;

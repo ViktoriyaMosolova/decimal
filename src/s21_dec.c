@@ -33,7 +33,6 @@ s21_decimal div_int(s21_decimal a, s21_decimal b, s21_decimal* c) {
     int majorA = getMajorBit(a), majorB = getMajorBit(b);
     int shift_bite = majorA - majorB;
     shift_decimal(&b, shift_bite);
-   
     if(s21_is_less(a,b)) shift_decimal(&b, -1), shift_bite--; 
     s21_sub(a,b,&tmp);
     c->bits[0] = 1;
@@ -45,7 +44,33 @@ s21_decimal div_int(s21_decimal a, s21_decimal b, s21_decimal* c) {
     }
     return tmp;
 }
-int mult_div(s21_decimal a, s21_decimal b, s21_decimal* c) {
+
+int ammount_digit(s21_decimal a) {
+    int i = -1;
+    s21_decimal zero = {{0}};
+    while(!(s21_is_equal(a, zero))){
+        i++;
+        div_ten(&a);
+    }
+    return i;
+}
+
+
+void division(s21_decimal a, s21_decimal b, s21_decimal* c) {
+    s21_decimal tmp = div_int(a,b,c);
+    s21_decimal zero={{0}};
+    int scale = getScale(*c);
+    while(!s21_is_equal(tmp,zero) && scale < 27) {
+        mult_ten(&tmp); mult_ten(c);
+        scale++;
+        s21_decimal new_tmp = div_int(tmp,b,&tmp);
+        s21_add(*c, tmp, c);
+        tmp = new_tmp;
+    }
+    setScale(c, scale);
+
+}
+void mult_div(s21_decimal a, s21_decimal b, s21_decimal* c) {
     s21_decimal rez = {0};
     int n = getMajorBit(b);
     for (int i = 0;i <=n; i++) {
@@ -56,16 +81,18 @@ int mult_div(s21_decimal a, s21_decimal b, s21_decimal* c) {
             rez=*c;
         }
     }
-    return 0;
+}
+void div_ten(s21_decimal *a) {
+    s21_decimal tmp = {{10,0,0,0}};
+    s21_decimal tmp2 = *a;
+    div_int(tmp2, tmp, a);
+}
+void mult_ten(s21_decimal *a) {
+    s21_decimal tmp = *a;
+    s21_decimal tmp2 = *a;
+    init(a);
+    shift_decimal(&tmp, 3);
+    shift_decimal(&tmp2, 1);
+    s21_add(tmp, tmp2 , a);
 }
 
-void mult_ten(s21_decimal a, s21_decimal *c) {
-    s21_decimal tmp = a;
-    shift_decimal(&tmp, 3);
-    shift_decimal(&a, 1);
-    s21_add(tmp, a , c);
-}
-void div_ten(s21_decimal a, s21_decimal *c) {
-    s21_decimal tmp = {{10,0,0,0}};
-    div_int(a, tmp, c);
-}
