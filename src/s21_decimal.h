@@ -10,6 +10,11 @@
 typedef struct {
     unsigned int bits[4];
 } s21_decimal;
+
+typedef struct {
+    unsigned int bits[7];
+} s21_big_decimal;
+
 //--------------print-----------------//
 char* printBin(s21_decimal);
 char* toBinary(int);
@@ -58,18 +63,25 @@ void printDecAndBin(s21_decimal num);
 void printBits(s21_decimal num);
 
 void setBit(s21_decimal* num, int i, int result);
+void setBitBig(s21_big_decimal* num, int i, int result);
+void setSignBig(s21_big_decimal *num, int sign);
 void setSign(s21_decimal* num, int sign);
 void setScale(s21_decimal* num, unsigned int result);
+void setScaleBig(s21_big_decimal* num, unsigned int result);
 
 int getBit(s21_decimal num, int i);
+int getBitBig(s21_big_decimal num, int i);
 int getSign(s21_decimal num);
+int getSignBig(s21_big_decimal num);
 int getScale(s21_decimal num);
+int getScaleBig(s21_big_decimal num);
+
+void setScaleFloat(int* num, int result);
+void setSignFloat(int *num, int sign);
 
 int getBitFloat(int num, int i);
-void setScaleFloat(int* num, int result);
 int getSignFloat(int num);
 int getScaleFloat(int num);
-void setSignFloat(int *num, int sign);
 
 int s21_is_equal(s21_decimal, s21_decimal);
 int s21_is_not_equal(s21_decimal, s21_decimal);
@@ -86,11 +98,16 @@ int s21_from_float_to_decimal(float src, s21_decimal *dst);
 int s21_from_decimal_to_float(s21_decimal src, float *dst);
 
 int s21_add(s21_decimal value_1, s21_decimal value_2, s21_decimal *result);
+int s21_add_big(s21_decimal value_1, s21_decimal value_2, s21_decimal *result);
 int s21_sub(s21_decimal value_1, s21_decimal value_2, s21_decimal *result);
 
 int s21_negate(s21_decimal, s21_decimal*);
 int s21_truncate(s21_decimal value, s21_decimal *result);
 int s21_round (s21_decimal value, s21_decimal *result);
 
+void s21_from_decimal_to_big_decimal(s21_decimal, s21_big_decimal*);
+void s21_from_big_decimal_to_decimal(s21_big_decimal, s21_decimal*);
+
+void s21_decimal_init_zero(s21_decimal *src);
 
 #endif  //  SRC_S21_DECIMAL_H_

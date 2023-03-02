@@ -5,15 +5,15 @@ endif
 all: s21_decimal.a
 
 s21_decimal.a:
-	gcc -Wall -Wextra -Werror -std=c11 -c s21_*.c
+	gcc -Wall -Wextra -Werror -std=c11 -c s21_*.c $(LFLAG)
 	ar rc s21_decimal.a s21_*.o
 	ranlib s21_decimal.a
 
 test: clean s21_decimal.a 
-#	gcc main.c -o main s21_decimal.a -lcheck $(LFLAG)
-#	./main
-	gcc Test_function/Test.c Test_function/Convertors/*.c -o test s21_decimal.a -lcheck $(LFLAG)
-	./test
+	gcc main.c -o main s21_decimal.a -lcheck $(LFLAG)
+	./main
+#	gcc Test_function/Test.c Test_function/Convertors/*.c -o test s21_decimal.a -lcheck $(LFLAG)
+#	./test
 
 gcov_report:	
 	gcc s21_*.c TEST.c -lcheck -o gcov_report --coverage $(LFLAG)
