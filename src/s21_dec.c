@@ -64,20 +64,20 @@ void division(s21_decimal a, s21_decimal b, s21_decimal* c) {
         mult_ten(&tmp); mult_ten(c);
         scale++;
         s21_decimal new_tmp = div_int(tmp,b,&tmp);
-        s21_add(*c, tmp, c);
+        add_bytes(*c, tmp, c);
         tmp = new_tmp;
     }
     setScale(c, scale);
 
 }
-void mult_div(s21_decimal a, s21_decimal b, s21_decimal* c) {
+void mult_int(s21_decimal a, s21_decimal b, s21_decimal* c) {
     s21_decimal rez = {0};
     int n = getMajorBit(b);
     for (int i = 0;i <=n; i++) {
         s21_decimal tmp = a;
         if (getBit(b,i) == 1) {
             if (i!=0) shift_decimal(&tmp, i);
-            s21_add(tmp, rez, c);
+            add_bytes(tmp, rez, c);
             rez=*c;
         }
     }
@@ -93,7 +93,8 @@ void mult_ten(s21_decimal *a) {
     init(a);
     shift_decimal(&tmp, 3);
     shift_decimal(&tmp2, 1);
-    s21_add(tmp, tmp2 , a);
+    if(add_bytes(tmp, tmp2 , a))
+    printf("TO_mUCH\n");
 }
 int getMajorMax(s21_decimal a, s21_decimal b) {
     int majorA = getMajorBit(a), majorB = getMajorBit(b);
@@ -108,7 +109,9 @@ void cast_scale(s21_decimal *a, s21_decimal *b) {
     int scale_b = getScale(*b);
     int scale_cast;
     while (scale_a != scale_b){
-        if (getMajorMax(*a,*b)+3 > 96) {
+        if (getMajorMax(*a,
+        *b)+3 > 96) {
+            printf("HI\n");
             if (scale_a > scale_b) div_ten(a), scale_a--;
             else div_ten(b), scale_b--;
         } else {
@@ -116,7 +119,7 @@ void cast_scale(s21_decimal *a, s21_decimal *b) {
             else mult_ten(a), scale_a++;
         }
     }
-    printDecAndBin(*a);printDecAndBin(*b);
+   // printDecAndBin(*a);printDecAndBin(*b);
     scale_cast = scale_a;
     setScale(a, scale_cast);
     setScale(b, scale_cast);

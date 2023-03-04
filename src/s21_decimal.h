@@ -61,8 +61,9 @@ void  shift_decimal(s21_decimal* decimal, int shift); // shift pozitive -> right
 // void invert_value_2_for_sub(s21_decimal *num);
 // char* printBin(s21_decimal num);
 int s21_add(s21_decimal value_1, s21_decimal value_2, s21_decimal *result);
+int add_bytes(s21_decimal value_1, s21_decimal value_2, s21_decimal *c);
 int s21_sub(s21_decimal value_1, s21_decimal value_2, s21_decimal *result);
-void mult_div(s21_decimal a, s21_decimal b, s21_decimal* c);
+void mult_int(s21_decimal a, s21_decimal b, s21_decimal* c);
 void mult_ten(s21_decimal *a);
 int sub_for_poz(s21_decimal a, s21_decimal b, s21_decimal* result);
 s21_decimal div_int(s21_decimal a, s21_decimal b, s21_decimal* c);
