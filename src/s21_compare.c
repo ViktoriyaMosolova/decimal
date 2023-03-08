@@ -36,13 +36,15 @@ int s21_is_less(s21_decimal a, s21_decimal b) {
 }
 
 int s21_is_equal(s21_decimal a, s21_decimal b) {
-	int CODE = TRUE;
+	int CODE = FALSE;
 	int sign_a = getSign(a), sign_b = getSign(b);
 	int scale_a = getScale(a), scale_b = getScale(b);
 	if((sign_a == sign_b) && (scale_a == scale_b)) {
+        CODE = TRUE;
 		for(int i = 95; CODE && i >= 0; i--) 
 			if(getBit(a, i) != getBit(b, i)) CODE = FALSE;
 	}
+    if(!a.bits[0] && !a.bits[1] && !a.bits[2] && !b.bits[0] && !b.bits[1] && !b.bits[2]) CODE = TRUE;
 	return CODE;
 }
 

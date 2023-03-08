@@ -27,7 +27,20 @@ int toDec(char *);
 //--------------print-----------------//
 
 #define MAX_NUM 30
+#define LOW 0
+#define MID 1
+#define HIGH 2
+#define SCALE 3
+#define ERROR_CALC 1
+
+#define S21_MAX_UINT 4294967296
+
+
 #define MINUS 2147483648
+#define EXP_INT_MASK 8355840
+#define MASK_FLOAT_EXP 1069547520
+#define MAX_DEC 4294967295
+
 #define OK 0
 #define LARGE_OR_EQ_INF 1
 #define SMALL_OR_EQ_NEGINF 2
@@ -64,7 +77,7 @@ int s21_add(s21_decimal value_1, s21_decimal value_2, s21_decimal *result);
 int add_bytes(s21_decimal value_1, s21_decimal value_2, s21_decimal *c);
 int s21_sub(s21_decimal value_1, s21_decimal value_2, s21_decimal *result);
 void mult_int(s21_decimal a, s21_decimal b, s21_decimal* c);
-void mult_ten(s21_decimal *a);
+int mult_ten(s21_decimal *a);
 int sub_for_poz(s21_decimal a, s21_decimal b, s21_decimal* result);
 s21_decimal div_int(s21_decimal a, s21_decimal b, s21_decimal* c);
 void div_ten(s21_decimal *a) ;
@@ -80,4 +93,7 @@ char* powTwo(int b);
 int toDec(char *bin);
 int ammount_digit(s21_decimal a);
 
+int s21_negate(s21_decimal value, s21_decimal *result);
+int s21_round (s21_decimal value, s21_decimal *result);
+int s21_truncate(s21_decimal value, s21_decimal *result);
 #endif  //  SRC_S21_DECIMAL_H_

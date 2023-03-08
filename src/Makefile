@@ -1,6 +1,9 @@
 CFLAGS = -Wall -Wextra -Werror -pedantic -std=c11
 GCOVFLAGS = --coverage 
 TEST_FLAGS = -lm -lcheck
+S21_SUITE_C = tests/*.c
+S21_SUITE_O = suite_*.o
+
 
 HEADER = s21_decimal.h 
 SOURCES_ALL = $(wildcard *.c)
@@ -29,10 +32,11 @@ s21_decimal.a: $(OBJ_LIBRARY)  $(HEADER)
 	ranlib s21_decimal.a
 	rm -f *.o
 
-#test: clean s21_decimal.a
-#	gcc $(CFLAGS) s21_decimal.c s21_decimal.a -o test -lm -lcheck $(FLAGS)
-#	./test
-#	rm test
+test: s21_decimal.a
+	gcc $(CFLAGS) -c $(S21_SUITE_C) main.c
+	gcc $(CFLAGS) -o test $(S21_SUITE_O) main.o s21_decimal.a -lcheck
+	rm -rf *.o *.a
+	./test
 
 
 check:

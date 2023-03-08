@@ -3,7 +3,7 @@
 #define bb 4
 
 
-int main() {
+/*int main() {
     s21_decimal a = {{aa,0,UINT_MAX,0}}, b={{bb,bb,1,0}}, rez={0};
     setScale(&a, 0); setScale(&b, 5);
     printDecAndBin(a);printDecAndBin(b);
@@ -12,7 +12,7 @@ int main() {
     //printf("\n%d\n", add_bytes(a, b, &rez));
     printDecAndBin(rez);
     return 0;
-}
+}*/
 
 char* printBin(s21_decimal num) {
     char *number = (char*)calloc(97, sizeof(char));
