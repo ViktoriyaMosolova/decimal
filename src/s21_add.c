@@ -28,7 +28,7 @@ int s21_add(s21_decimal value_1, s21_decimal value_2, s21_decimal *c) {
 int add_bytes(s21_decimal value_1, s21_decimal value_2, s21_decimal *c) {
     s21_decimal result = {0};    
     int tmp=0;
-        for (int i=0; i<96; i++) {
+        for (int i=0; i<97; i++) {
             int left_dec=getBit(value_1, i);
             int right_dec=getBit(value_2, i);
 
@@ -48,6 +48,7 @@ int add_bytes(s21_decimal value_1, s21_decimal value_2, s21_decimal *c) {
                 if (!tmp) setBit(&result, i, 1);
 
             }
+            //printDecAndBin(result);
         }
     if (getBit(result, 96)) return 1;
     *c = result;

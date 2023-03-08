@@ -1,17 +1,16 @@
 #include "s21_decimal.h"
-#define aa 188
-#define bb 45
+#define aa 21
+#define bb 4
 
 
 int main() {
-    s21_decimal a = {{aa,0,aa,0}}, b={{bb,0,0,0}}, rez={0};
-    setScale(&a, 1); setScale(&b, 9);
+    s21_decimal a = {{aa,0,UINT_MAX,0}}, b={{bb,bb,1,0}}, rez={0};
+    setScale(&a, 0); setScale(&b, 5);
     printDecAndBin(a);printDecAndBin(b);
     printf("\n");
-    int flag = s21_add(a,b,&rez);
-    if (flag == LARGE_OR_EQ_INF) printf("LARGE_OR_EQ_INF");
-    else if (flag == SMALL_OR_EQ_NEGINF) printf("SMALL_OR_EQ_NEGINF");
-    else printDecAndBin(rez);//  printDecAndBin(ost);
+    division(a,b,&rez);
+    //printf("\n%d\n", add_bytes(a, b, &rez));
+    printDecAndBin(rez);
     return 0;
 }
 
