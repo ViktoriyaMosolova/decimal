@@ -2,6 +2,8 @@
 
 int s21_from_decimal_to_int(s21_decimal src, int *dst) {
     int CODE = CONVERTORS_OK;
+    if (dst == NULL) return CONVERTORS_ERROR;
+    if (getScale(src)) s21_truncate(src, &src);
     if (src.bits[0] <= 2147483647 && src.bits[1] == 0 && src.bits[2] == 0 && getScale(src) == 0) {
   		if(getSign(src) == 0) {
   			*dst = src.bits[0];
@@ -14,6 +16,7 @@ int s21_from_decimal_to_int(s21_decimal src, int *dst) {
     return CODE;
 }
 int s21_from_int_to_decimal(int src, s21_decimal *dst) {
+    if (dst == NULL) return 1;
     int CODE = CONVERTORS_OK;
 	dst->bits[0]=0;
 	dst->bits[1]=0;
