@@ -82,3 +82,10 @@ int s21_round (s21_decimal value, s21_decimal *result) {
     return 0;
   }
     
+int s21_floor(s21_decimal a, s21_decimal* res) {
+  if (res == NULL) return 1;
+  s21_decimal one = {{1,0,0,0}};
+  s21_truncate(a, res);
+  if (getSign(a)) add_bytes(*res, one, res), setSign(res, 1);
+  return 0;
+}

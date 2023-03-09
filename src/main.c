@@ -24,9 +24,9 @@ void run_all_testcases() {
                          suite_s21_from_decimal_to_int(),
                          suite_s21_from_int_to_decimal(),
                          suite_s21_truncate(),
-                         //suite_s21_floor(),
                          suite_s21_negate(),
                          suite_s21_round(),
+                         suite_s21_floor(),
                          NULL};
 
   for (int i = 0; list_cases[i] != NULL; i++) {
