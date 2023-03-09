@@ -2,6 +2,31 @@
 
 
 int s21_sub(s21_decimal a, s21_decimal b, s21_decimal *c) {
+    s21_decimal zero = {{0}};
+    int flag = 0;
+    if (s21_is_equal(b,zero)) return 3;
+    cast_scale(&a,&b);
+    int signA = getSign(a), signB = getSign(b);
+    if (signA && signB) {//-1-(-2) = -1+2
+        setSign(&a, 0), setSign(&b,0);
+        if (s21_is_less_or_equal(a, b)) sub_bites(b, a, c); // -1+2
+        else sub_bites(a, b, c), setSign(c,1); // -2+1
+    } else if (!signA && signB) {//2-(-1)
+        setSign(&b,0);
+        flag = s21_add(a,b,c);
+    } else if (signA && !signB) {//-2 - 1
+        setSign(&a, 0), setSign(&b,0);
+        flag = s21_add(a,b,c);
+        setSign(c,1);
+    } else {
+        if (!s21_is_less(a, b)) sub_bites(a, b, c); // 2 - 1
+        else sub_bites(b, a, c), setSign(c,1); // 1 - 2
+    } 
+    if (flag == 1) flag = 2;
+    return flag;
+}
+
+void sub_bites(s21_decimal a, s21_decimal b, s21_decimal *c){
     int bitA, bitB, zaim = 0;
     for (int i = 0; i < 96; i++) {
         bitA = getBit(a, i);
@@ -25,5 +50,4 @@ int s21_sub(s21_decimal a, s21_decimal b, s21_decimal *c) {
                 setBit(c, i, 0);
         }
     }
-    return 0;
 }
