@@ -1,4 +1,41 @@
 #include "s21_decimal.h"
+//int s21_div(s21_decimal a, s21_decimal b, s21_decimal* c){}
+void division(s21_decimal a, s21_decimal b, s21_decimal* c) {
+    cast_scale(&a, &b);
+    //printDecAndBin(a), printDecAndBin(b); 
+    s21_decimal tmp = div_int(a,b,c);
+    printf("here tmp: "), printDecAndBin(tmp);
+    //printDecAndBin(*c); 
+    s21_decimal zero={{0}};
+    int scale = getScale(*c);
+    //printf("S:%d\n", scale);
+    int k = 0;
+    while(compareBits(tmp,zero) != EQUAL && scale < 28) {
+        k ++;
+        //printf("here 1: "), printDecAndBin(tmp);
+        mult_ten(&tmp); 
+        if(mult_ten(c)) break;
+         if (k == 3) {
+            printf("here: "), printDecAndBin(tmp);
+            printDecAndBin(*c);
+        }
+         
+        scale++;
+        s21_decimal new_tmp = div_int(tmp,b,&tmp);
+        if (k == 3) {
+            printf("new: "), printDecAndBin(new_tmp);
+            //break;
+        }
+        //break;
+        if(compareBits(new_tmp, b) == LESS) if(add_bytes(*c, tmp, c)) break;
+        tmp = new_tmp;
+       
+       
+       
+    }
+    setScale(c, scale);
+
+}
 
 void  shift_decimal(s21_decimal* decimal, int shift) {
     if (shift > 0) {
@@ -57,76 +94,12 @@ int ammount_digit(s21_decimal a) {
     return i;
 }
 
-
-void division(s21_decimal a, s21_decimal b, s21_decimal* c) {
-    cast_scale(&a, &b);
-    //printDecAndBin(a), printDecAndBin(b); 
-    s21_decimal tmp = div_int(a,b,c);
-    printf("here tmp: "), printDecAndBin(tmp);
-    //printDecAndBin(*c); 
-    s21_decimal zero={{0}};
-    int scale = getScale(*c);
-    //printf("S:%d\n", scale);
-    int k = 0;
-    while(compareBits(tmp,zero) != EQUAL && scale < 28) {
-        k ++;
-        //printf("here 1: "), printDecAndBin(tmp);
-        mult_ten(&tmp); 
-        if(mult_ten(c)) break;
-         if (k == 3) {
-            printf("here: "), printDecAndBin(tmp);
-            printDecAndBin(*c);
-        }
-         
-        scale++;
-        s21_decimal new_tmp = div_int(tmp,b,&tmp);
-        if (k == 3) {
-            printf("new: "), printDecAndBin(new_tmp);
-            //break;
-        }
-        //break;
-        if(compareBits(new_tmp, b) == LESS) if(add_bytes(*c, tmp, c)) break;
-        tmp = new_tmp;
-       
-       
-       
-    }
-    setScale(c, scale);
-
-}
-void mult_int(s21_decimal a, s21_decimal b, s21_decimal* c) {
-    s21_decimal rez = {0};
-    int n = getMajorBit(b);
-    for (int i = 0;i <=n; i++) {
-        s21_decimal tmp = a;
-        if (getBit(b,i) == 1) {
-            if (i!=0) shift_decimal(&tmp, i);
-            add_bytes(tmp, rez, c);
-            rez=*c;
-        }
-    }
-}
 void div_ten(s21_decimal *a) {
     s21_decimal tmp = {{10,0,0,0}};
     s21_decimal tmp2 = *a;
     div_int(tmp2, tmp, a);
 }
-int mult_ten(s21_decimal *a) {
-    s21_decimal tmp = *a;
-    s21_decimal tmp2 = *a;//проверять мажорный бит, чтоб не переполняться
-    int scale = getScale(*a);
-    int sign = getSign(*a);
-    init(a);
-    shift_decimal(&tmp, 3);
-    shift_decimal(&tmp2, 1);
-    if(add_bytes(tmp, tmp2 , a)) {
-        printf("TO_mUCH\n");
-        return 1;
-    }
-    setScale(a, scale);
-    setSign(a, sign);
-    return 0;
-}
+
 int getMajorMax(s21_decimal a, s21_decimal b) {
     int majorA = getMajorBit(a), majorB = getMajorBit(b);
     int majorMax;
@@ -156,4 +129,3 @@ void cast_scale(s21_decimal *a, s21_decimal *b) {
     setScale(b, scale_cast);
     
 }
-

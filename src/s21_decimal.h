@@ -83,13 +83,16 @@ int s21_add(s21_decimal value_1, s21_decimal value_2, s21_decimal *result);
 int add_bytes(s21_decimal value_1, s21_decimal value_2, s21_decimal *c);
 void sub_bites(s21_decimal a, s21_decimal b, s21_decimal *c);
 int s21_sub(s21_decimal value_1, s21_decimal value_2, s21_decimal *result);
-void mult_int(s21_decimal a, s21_decimal b, s21_decimal* c);
+int mult_int(s21_decimal a, s21_decimal b, s21_decimal* c);
 int mult_ten(s21_decimal *a);
 int sub_for_poz(s21_decimal a, s21_decimal b, s21_decimal* result);
 s21_decimal div_int(s21_decimal a, s21_decimal b, s21_decimal* c);
 void div_ten(s21_decimal *a) ;
 void division(s21_decimal a, s21_decimal b, s21_decimal* c);
+void s21_div(s21_decimal a, s21_decimal b, s21_decimal* c);
+int s21_mul(s21_decimal a, s21_decimal b, s21_decimal* c);
 void cast_scale(s21_decimal *a, s21_decimal *b);
+int s21_mod(s21_decimal value_1, s21_decimal value_2, s21_decimal *result);
 
 char* toBinary(int n);
 char* additionString(char* a, char* b);
