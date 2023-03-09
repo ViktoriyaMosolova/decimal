@@ -3,17 +3,12 @@
 int s21_negate(s21_decimal value, s21_decimal *result) {
 	int CODE = OK;
 	if(result) {
-		s21_decimal null = {0};
-		if (s21_is_equal(value, null)) {
-	    	*result = null;
-	  	} else {
 			*result = value;
 			if (getSign(value)) {
 		    	setSign(result, 0);
 		    } else {
 		    	setSign(result, 1);
 		    }
-		}
 	} else {
 		CODE = ERROR_CALC;
 	}
