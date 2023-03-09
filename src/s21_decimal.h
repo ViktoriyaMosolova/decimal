@@ -41,6 +41,12 @@ int toDec(char *);
 #define MASK_FLOAT_EXP 1069547520
 #define MAX_DEC 4294967295
 
+#define CONVERTORS_OK 0
+#define CONVERTORS_ERROR 1
+//----------------------
+#define COMPARISON_FALSE 0
+#define COMPARISON_TRUE 1
+
 #define OK 0
 #define LARGE_OR_EQ_INF 1
 #define SMALL_OR_EQ_NEGINF 2
@@ -96,4 +102,9 @@ int ammount_digit(s21_decimal a);
 int s21_negate(s21_decimal value, s21_decimal *result);
 int s21_round (s21_decimal value, s21_decimal *result);
 int s21_truncate(s21_decimal value, s21_decimal *result);
+
+int s21_from_int_to_decimal(int src, s21_decimal *dst);
+int s21_from_decimal_to_int(s21_decimal src, int *dst);
+int s21_from_float_to_decimal(float src, s21_decimal *dst);
+int s21_from_decimal_to_float(s21_decimal src, float *dst);
 #endif  //  SRC_S21_DECIMAL_H_

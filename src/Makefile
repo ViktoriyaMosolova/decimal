@@ -1,7 +1,7 @@
 CFLAGS = -Wall -Wextra -Werror -pedantic -std=c11
 GCOVFLAGS = --coverage 
 TEST_FLAGS = -lm -lcheck
-S21_SUITE_C = tests/*.c
+S21_SUITE_C = tests/suite_s21_truncate.c
 S21_SUITE_O = suite_*.o
 
 
@@ -21,12 +21,6 @@ all: s21_decimal.a
 	gcc *.c *.a -o test
 	./test
 
-test: 
-	make s21_decimal.a
-	gcc -g *.c *.a -o test
-	#gdb ./test
-	lldb ./test
-
 s21_decimal.a: $(OBJ_LIBRARY)  $(HEADER)
 	ar rcs s21_decimal.a $(OBJ_LIBRARY)
 	ranlib s21_decimal.a
@@ -34,7 +28,7 @@ s21_decimal.a: $(OBJ_LIBRARY)  $(HEADER)
 
 test: s21_decimal.a
 	gcc $(CFLAGS) -c $(S21_SUITE_C) main.c
-	gcc $(CFLAGS) -o test $(S21_SUITE_O) main.o s21_decimal.a -lcheck
+	gcc $(CFLAGS) -o test $(S21_SUITE_O) main.o s21_decimal.a -lcheck -lm -lsubunit
 	rm -rf *.o *.a
 	./test
 

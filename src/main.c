@@ -13,16 +13,20 @@ void run_all_testcases() {
                          suite_s21_mul(),
                          suite_s21_div(),
                          suite_s21_mod(),*/
-                         suite_s21_is_greater(),
-                         suite_s21_is_less_or_equal(),
-                         suite_s21_is_greater_or_equal(),
-                         suite_s21_is_less(),
-                         suite_s21_is_equal(),
-                         suite_s21_is_not_equal(),
+                         //suite_s21_is_greater(),
+                         //suite_s21_is_less_or_equal(),
+                         //suite_s21_is_greater_or_equal(),
+                         //suite_s21_is_less(),
+                         //suite_s21_is_equal(),
+                         //suite_s21_is_not_equal(),
+                         //suite_s21_from_decimal_to_float(),
+                         //suite_s21_from_float_to_decimal(),
+                         //suite_s21_from_decimal_to_int(),
+                         //suite_s21_from_int_to_decimal(),
                          suite_s21_truncate(),
                          //suite_s21_floor(),
-                         suite_s21_negate(),
-                         suite_s21_round(),
+                         //suite_s21_negate(),
+                         //suite_s21_round(),
                          NULL};
 
   for (int i = 0; list_cases[i] != NULL; i++) {

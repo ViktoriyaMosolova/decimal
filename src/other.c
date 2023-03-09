@@ -64,36 +64,25 @@ int s21_round (s21_decimal value, s21_decimal *result) {
 
 
  int s21_truncate(s21_decimal value, s21_decimal *result) {
+    if (result == NULL) return 1;
     for (int i = 0; i < 4; i += 1) result->bits[i] = 0;
     int sign=getSign(value);
     int scale=getScale(value);
     
     value.bits[3]=0;
-    if (scale==0) {
-        for (int i = 0; i < 4; i += 1) 
-            result->bits[i] = value.bits[i];
-     }
-      else {
-        for (int i = 0; i <scale; i ++) {
-          unsigned long long a = value.bits[2];
-    
-
-    for (int j = 2; j >= 0; j --) {
-      value.bits[j] = a/10; //каждый бит делим на 10
-      a= (a % 10) * (S21_MAX_UINT) + value.bits[j - 1];//поскольку у нас биты хранятся в инте, то остаток от деления мы прибавляем к предыдущему, домножая на различие в степенях двойки 
-    
-    }
-    
-     
-  }
-  
-  setScale(&value, (getScale(value) - scale));
-
-       for (int i = 0; i < 4; i += 1) {
-        result->bits[i]=value.bits[i];
-       }
+    if (scale==0) *result = value;
+    else {
+      for (int i = 0; i <scale; i ++) {
+        unsigned long long a = value.bits[2];
+        for (int j = 2; j >= 0; j --) {
+          value.bits[j] = a/10; //каждый бит делим на 10  
+          a= (a % 10) * (S21_MAX_UINT) + value.bits[j - 1];//поскольку у нас биты хранятся в инте, то остаток от деления мы прибавляем к предыдущему, домножая на различие в степенях двойки 
         }
-        setSign(result, sign);
+      }
+      setScale(&value, 0);
+      *result = value;
+    }
+    setSign(result, sign);
     return 0;
- }
+  }
     
