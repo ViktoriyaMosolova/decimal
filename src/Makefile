@@ -1,7 +1,7 @@
 CFLAGS = -Wall -Wextra -Werror -pedantic -std=c11
 GCOVFLAGS = --coverage 
 TEST_FLAGS = -lm -lcheck
-S21_SUITE_C = tests/suite_s21_negate.c
+S21_SUITE_C = tests/suite_s21_round.c
 S21_SUITE_O = suite_*.o
 
 

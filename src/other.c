@@ -17,6 +17,7 @@ int s21_negate(s21_decimal value, s21_decimal *result) {
 
 
 int s21_round (s21_decimal value, s21_decimal *result) {
+  if (result == NULL) return 1;
     for (int i = 0; i < 4; i += 1) result->bits[i] = 0;
     int sign=getSign(value);
     int scale=getScale(value);
