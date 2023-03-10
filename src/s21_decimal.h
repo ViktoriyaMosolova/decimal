@@ -122,7 +122,7 @@ int sub_bin_big(big_decimal value_1, big_decimal value_2,
 int div10_big_dec(big_decimal *n);
 void big_init(big_decimal * val);
 void bank_round(big_decimal value, big_decimal *result);
-int sub_bin_big(big_decimal a, big_decimal b, big_decimal *c);
+int sub_bits_big(big_decimal a, big_decimal b, big_decimal *c);
 void mod10(big_decimal value, big_decimal *mod);
 int addBinBig(big_decimal value_1, big_decimal value_2,
                  big_decimal *result);
