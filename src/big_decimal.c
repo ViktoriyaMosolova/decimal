@@ -27,8 +27,8 @@ int sub_bin_big(big_decimal value_1, big_decimal value_2,
                          big_decimal *result) {
   int err;
   big_decimal zer;
-  big_init(&zer)
-  if (big_dec_compare(value_2, (big_decimal)0) != EQUAL) {
+  big_init(&zer);
+  if (big_dec_compare(value_2, zer) != EQUAL) {
     for (int i = 0; i < 192; i++)
       value_2.bits[i / 32] = reverse_bit(value_2.bits[i / 32], i);
     value_2.bits[LOW]++;
@@ -84,7 +84,7 @@ void bank_round(big_decimal value, big_decimal *result) {
   *result = value;
 }
 
-void sub_bin_big(big_decimal a, big_decimal b, big_decimal *c) {
+void sub_bits_big(big_decimal a, big_decimal b, big_decimal *c) {
     int bitA, bitB, tmp = 0;
     for (int i = 0; i < 6*32; i++) {
         bitA = getBitBig(a, i);
