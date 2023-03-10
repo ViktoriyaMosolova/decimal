@@ -1,15 +1,15 @@
 CFLAGS = -Wall -Wextra -Werror -pedantic -std=c11
-GCOVFLAGS = --coverage 
-TEST_FLAGS = -lm -lcheck
+TEST_FLAGS = -lm -lpthread -lrt
 S21_SUITE_C = tests/*.c
 S21_SUITE_O = suite_*.o
+GCOV_FLAGS = -ftest-coverage -fprofile-arcs
 
 
 HEADER = s21_decimal.h 
 SOURCES_ALL = $(wildcard *.c)
 
 ifeq ($(shell uname -s), Linux)	
-	FLAGS += -lpthread -lrt -lm -lsubunit
+	FLAGS += -lpthread -lrt -lm #-lsubunit
 endif
 
 OBJ_LIBRARY := $(patsubst %.c, %.o, $(SOURCES_ALL))
@@ -28,10 +28,18 @@ s21_decimal.a: $(OBJ_LIBRARY)  $(HEADER)
 
 test: s21_decimal.a
 	gcc $(CFLAGS) -c $(S21_SUITE_C) main.c
-	gcc $(CFLAGS) -o test $(S21_SUITE_O) main.o s21_decimal.a -lcheck -lm -lsubunit
+	gcc $(CFLAGS) -o test $(S21_SUITE_O) main.o s21_decimal.a -lcheck -lm #-lsubunit
 	rm -rf *.o *.a
 	./test
 
+
+gcov_report: s21_decimal.a
+	gcc ${GCOV_FLAGS} -c ${S21_SUITE_C}
+	gcc $(GCOV_FLAGS) *.o s21_decimal.a -lcheck ${TEST_FLAGS} -o test
+	./test
+	lcov -t "test" -o test.info -c -d .
+	genhtml -o report test.info
+	open report/index.html
 
 check:
 	clang-format -style=Google -n *.c
