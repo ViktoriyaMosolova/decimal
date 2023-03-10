@@ -8,7 +8,7 @@ void run_testcase(Suite *testcase) {
 }
 
 void run_all_testcases() {
-  Suite *list_cases[] = {//suite_s21_add(),
+  Suite *list_cases[] = {suite_s21_add(),
                          suite_s21_sub(),
                          suite_s21_mul(),
                          //suite_s21_div(),

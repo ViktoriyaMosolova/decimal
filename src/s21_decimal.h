@@ -11,6 +11,9 @@
 #define MINUS 2147483648
 
 
+typedef struct {
+    unsigned int bits[6];
+} big_decimal;
 
 typedef struct {
     unsigned int bits[4];
@@ -112,4 +115,17 @@ int s21_from_int_to_decimal(int src, s21_decimal *dst);
 int s21_from_decimal_to_int(s21_decimal src, int *dst);
 int s21_from_float_to_decimal(float src, s21_decimal *dst);
 int s21_from_decimal_to_float(s21_decimal src, float *dst);
+int big_dec_compare(big_decimal a, big_decimal b);
+int check_max(big_decimal val_1, int scale, int sign);
+int sub_bin_big(big_decimal value_1, big_decimal value_2,
+                         big_decimal *result);
+int div10_big_dec(big_decimal *n);
+void big_init(big_decimal * val);
+void bank_round(big_decimal value, big_decimal *result);
+int sub_bin_big(big_decimal a, big_decimal b, big_decimal *c);
+void mod10(big_decimal value, big_decimal *mod);
+int addBinBig(big_decimal value_1, big_decimal value_2,
+                 big_decimal *result);
+int getBitBig(big_decimal num, int i);
+void setBitBig(big_decimal* num, int i, int result);
 #endif  //  SRC_S21_DECIMAL_H_

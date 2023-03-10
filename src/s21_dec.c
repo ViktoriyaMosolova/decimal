@@ -37,6 +37,48 @@ void division(s21_decimal a, s21_decimal b, s21_decimal* c) {
 
 }
 
+void  shift_big_decimal(big_decimal* decimal, int shift) {
+    if (shift > 0) {
+        for (int i = 0; i < shift;i++) {
+            int bit1 = getBitBig(*decimal, 31);
+            int bit2 = getBitBig(*decimal, 63);
+            int bit3 = getBitBig(*decimal, 95);
+            int bit4 = getBitBig(*decimal, 127);
+            int bit5 = getBitBig(*decimal, 159);
+            decimal->bits[5] <<= 1;
+            decimal->bits[4] <<= 1;
+            decimal->bits[3] <<= 1;
+            decimal->bits[2] <<= 1;
+            decimal->bits[1] <<= 1;
+            decimal->bits[0] <<= 1;
+            setBitBig(decimal, 32, bit1);
+            setBitBig(decimal, 64, bit2);
+            setBitBig(decimal, 96, bit3);
+            setBitBig(decimal, 128, bit4);
+            setBitBig(decimal, 160, bit5);
+        }
+    } else {
+        for (int i = 0; i < shift*(-1);i++) {
+            int bit1 = getBitBig(*decimal, 32);
+            int bit2 = getBitBig(*decimal, 64);
+            int bit3 = getBitBig(*decimal, 96);
+            int bit4 = getBitBig(*decimal, 128);
+            int bit5 = getBitBig(*decimal, 160);
+            decimal->bits[5] >>= 1;
+            decimal->bits[4] >>= 1;
+            decimal->bits[3] >>= 1;
+            decimal->bits[2] >>= 1;
+            decimal->bits[1] >>= 1;
+            decimal->bits[0] >>= 1;
+            setBitBig(decimal, 31, bit1);
+            setBitBig(decimal, 63, bit2);
+            setBitBig(decimal, 95, bit3);
+            setBitBig(decimal, 127, bit4);
+            setBitBig(decimal, 159, bit5);
+        }
+    }
+}
+
 void  shift_decimal(s21_decimal* decimal, int shift) {
     if (shift > 0) {
         for (int i = 0; i < shift;i++) {

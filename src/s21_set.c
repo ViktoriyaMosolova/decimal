@@ -7,6 +7,13 @@ void setBit(s21_decimal* num, int i, int result) {
     num->bits[i / 32] &= ~(1u << i % 32);
   }
 }
+void setBitBig(big_decimal* num, int i, int result) {
+  if (result == 1) {
+    num->bits[i / 32] |=  (1u << i % 32);
+  } else if (result == 0) {
+    num->bits[i / 32] &= ~(1u << i % 32);
+  }
+}
 
 void setSign(s21_decimal *num, int sign) {
     if (sign == 1) {

@@ -5,6 +5,11 @@ int getBit(s21_decimal num, int i) {
     return !(!(num.bits[i / 32] & mask));
 }
 
+int getBitBig(big_decimal num, int i) {
+    unsigned int mask = 1u << (i % 32);
+    return !(!(num.bits[i / 32] & mask));
+}
+
 int getSign(s21_decimal num) {
     return !(!(num.bits[3] & 1u << 31));
 }

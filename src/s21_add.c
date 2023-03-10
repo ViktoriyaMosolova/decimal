@@ -25,32 +25,31 @@ int s21_add(s21_decimal value_1, s21_decimal value_2, s21_decimal *c) {
     return OK;
 }
 
-int add_bytes(s21_decimal value_1, s21_decimal value_2, s21_decimal *c) {
-    s21_decimal result = {0};    
-    int tmp=0;
-        for (int i=0; i<97; i++) {
-            int left_dec=getBit(value_1, i);
-            int right_dec=getBit(value_2, i);
-
-            if (!right_dec && !left_dec && tmp) {
-                setBit(&result, i, 1);
-                tmp=0;
-            }
-
-            if (right_dec && left_dec) {
-                if (tmp==1) {
-                    setBit(&result, i, 1);
-                }
-                tmp=1;
-            }
-
-            if (right_dec^left_dec) {
-                if (!tmp) setBit(&result, i, 1);
-
-            }
-            //printDecAndBin(result);
+int add_bytes(big_decimal value_1, big_decimal value_2,
+                 big_decimal *result) {
+  short error = 0, tmp = 0;
+  int term1, term2;
+  big_init(result);
+  for (int j = 0; j < 6; j++) {
+    for (int i = 0; i < 32; i++) {
+      term1 = getBitBig(value_1, i * j);
+      term2 = getBitBig(value_2, i * j);
+      if (term1 && term2) {
+        if (tmp) {
+          setBitBig(result, i * j);
+        } else {
+          tmp = 1;
         }
-    if (getBit(result, 96)) return 1;
-    *c = result;
-    return 0;
+      } else if (term1 ^ term2) {
+        if (!tmp) {
+          setBitBig(result, i * j);
+        }
+      } else if (tmp) {
+        setBitBig(result, i * j);
+        tmp = 0;
+      }
+    }
+    if (tmp && j == 5) error = 1;
+  }
+  return error;
 }
