@@ -69,6 +69,7 @@ int getMajorBit(s21_decimal num);
 int getSign(s21_decimal num);
 void printBits(s21_decimal num);
 int getScale(s21_decimal num);
+int reverseBit(int a, int i);
 // --------COMPARE---------- //
 int s21_is_less(s21_decimal a, s21_decimal b);
 int s21_is_equal(s21_decimal a, s21_decimal b);
@@ -115,17 +116,25 @@ int s21_from_int_to_decimal(int src, s21_decimal *dst);
 int s21_from_decimal_to_int(s21_decimal src, int *dst);
 int s21_from_float_to_decimal(float src, s21_decimal *dst);
 int s21_from_decimal_to_float(s21_decimal src, float *dst);
+
+big_decimal  shift_big_decimal(big_decimal* decimal, int shift);
 int big_dec_compare(big_decimal a, big_decimal b);
 int check_max(big_decimal val_1, int scale, int sign);
 int sub_bin_big(big_decimal value_1, big_decimal value_2,
                          big_decimal *result);
 int div10_big_dec(big_decimal *n);
+void reverse_normalization(big_decimal value, s21_decimal *result);
 void big_init(big_decimal * val);
 void bank_round(big_decimal value, big_decimal *result);
-int sub_bits_big(big_decimal a, big_decimal b, big_decimal *c);
+void sub_bits_big(big_decimal a, big_decimal b, big_decimal *c);
 void mod10(big_decimal value, big_decimal *mod);
+big_decimal big_mult(big_decimal value_1,
+                              big_decimal value_2) ;
 int addBinBig(big_decimal value_1, big_decimal value_2,
                  big_decimal *result);
 int getBitBig(big_decimal num, int i);
 void setBitBig(big_decimal* num, int i, int result);
+int div10(s21_decimal *n);
+int is_divisible_by_10(s21_decimal n);
+
 #endif  //  SRC_S21_DECIMAL_H_

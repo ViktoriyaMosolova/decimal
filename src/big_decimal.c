@@ -30,11 +30,12 @@ int sub_bin_big(big_decimal value_1, big_decimal value_2,
   big_init(&zer);
   if (big_dec_compare(value_2, zer) != EQUAL) {
     for (int i = 0; i < 192; i++)
-      value_2.bits[i / 32] = reverse_bit(value_2.bits[i / 32], i);
+      value_2.bits[i / 32] = reverseBit(value_2.bits[i / 32], i);
     value_2.bits[LOW]++;
   }
   err = addBinBig(value_1, value_2, result);
   return err;
+}
 void reverse_normalization(big_decimal value, s21_decimal *result) {
   while (value.bits[3] || value.bits[4] || value.bits[5] ||
          (getScale(*result) > 28)) {
@@ -126,8 +127,8 @@ big_decimal big_mult(big_decimal value_1,
   for (int i = 0; i < 192; i++) {
     if (getBitBig(value_1, i)) {
       big_init(&tmp);
-      *tmp = res;
-      addBinBig(tmp, shift_big_decimal(value_2, i), &res);//мб нужно двигать обратно, то есть -i
+      tmp = res;
+      addBinBig(tmp, shift_big_decimal(&value_2, 1), &res);//мб нужно двигать обратно, то есть -i
     }
   }
   return res;
@@ -144,20 +145,35 @@ int addBinBig(big_decimal value_1, big_decimal value_2,
       term2 = getBitBig(value_2, i * j);
       if (term1 && term2) {
         if (tmp) {
-          setBitBig(result, i * j);
+          setBitBig(result, i * j, 1);
         } else {
           tmp = 1;
         }
       } else if (term1 ^ term2) {
         if (!tmp) {
-          setBitBig(result, i * j);
+          setBitBig(result, i * j, 1);
         }
       } else if (tmp) {
-        setBitBig(result, i * j);
+        setBitBig(result, i * j, 1);
         tmp = 0;
       }
     }
     if (tmp && j == 5) error = 1;
   }
   return error;
+}
+int div10(s21_decimal *n) {
+  unsigned int mod = 0;
+  long long int tmp;
+  for (int i = 2; i >= 0; --i) {
+    tmp = (unsigned)n->bits[i] + ((long long)(mod) << 32);
+    mod = tmp % 10;
+    n->bits[i] = tmp / 10;
+  }
+  return mod;
+}
+
+int is_divisible_by_10(s21_decimal n) {
+  s21_decimal tmp = n;
+  return !div10(&tmp);
 }

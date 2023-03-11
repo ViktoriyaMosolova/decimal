@@ -37,7 +37,7 @@ void division(s21_decimal a, s21_decimal b, s21_decimal* c) {
 
 }
 
-void  shift_big_decimal(big_decimal* decimal, int shift) {
+big_decimal  shift_big_decimal(big_decimal* decimal, int shift) {
     if (shift > 0) {
         for (int i = 0; i < shift;i++) {
             int bit1 = getBitBig(*decimal, 31);
@@ -77,6 +77,7 @@ void  shift_big_decimal(big_decimal* decimal, int shift) {
             setBitBig(decimal, 159, bit5);
         }
     }
+    return *decimal;
 }
 
 void  shift_decimal(s21_decimal* decimal, int shift) {

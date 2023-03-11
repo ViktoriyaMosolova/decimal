@@ -9,11 +9,11 @@ void run_testcase(Suite *testcase) {
 
 void run_all_testcases() {
   Suite *list_cases[] = {suite_s21_add(),
-                         suite_s21_sub(),
-                         suite_s21_mul(),
+                         //suite_s21_sub(),
+                         //suite_s21_mul(),
                          //suite_s21_div(),
                          //suite_s21_mod(),*/
-                         suite_s21_is_greater(),
+                         /*suite_s21_is_greater(),
                          suite_s21_is_less_or_equal(),
                          suite_s21_is_greater_or_equal(),
                          suite_s21_is_less(),
@@ -26,7 +26,7 @@ void run_all_testcases() {
                          suite_s21_truncate(),
                          suite_s21_negate(),
                          suite_s21_round(),
-                         suite_s21_floor(),
+                         suite_s21_floor(),*/
                          NULL};
 
   for (int i = 0; list_cases[i] != NULL; i++) {

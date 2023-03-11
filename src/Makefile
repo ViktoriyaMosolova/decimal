@@ -9,7 +9,7 @@ HEADER = s21_decimal.h
 SOURCES_ALL = $(wildcard *.c)
 
 ifeq ($(shell uname -s), Linux)	
-	FLAGS += -lpthread -lrt -lm #-lsubunit
+	TEST_FLAGS = -lsubunit -lm -lpthread -lrt
 endif
 
 OBJ_LIBRARY := $(patsubst %.c, %.o, $(SOURCES_ALL))
@@ -24,11 +24,11 @@ all: s21_decimal.a
 s21_decimal.a: $(OBJ_LIBRARY)  $(HEADER)
 	ar rcs s21_decimal.a $(OBJ_LIBRARY)
 	ranlib s21_decimal.a
-	rm -f *.o
+	#rm -f *.o
 
 test: s21_decimal.a
 	gcc $(CFLAGS) -c $(S21_SUITE_C) main.c
-	gcc $(CFLAGS) -o test $(S21_SUITE_O) main.o s21_decimal.a -lcheck -lm #-lsubunit
+	gcc $(CFLAGS) -o test $(S21_SUITE_O) main.o s21_decimal.a -lcheck -lm -lsubunit	
 	rm -rf *.o *.a
 	./test
 

@@ -36,3 +36,7 @@ void init(s21_decimal* a) {
   for (int i = 0; i < 96; i++)
     setBit(a, i, 0);
 }
+
+int reverseBit(int a, int i) { 
+  return (a ^ (1 << i)); 
+  }
