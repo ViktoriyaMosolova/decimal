@@ -42,7 +42,7 @@ gcov_report: s21_decimal.a
 	open report/index.html
 
 check:
-	clang-format -style=Google -n *.c
+	clang-format -style=Google -i *.c
 	clang-format -style=Google -n *.c
 
 rebuild: clean all

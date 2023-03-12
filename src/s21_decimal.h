@@ -92,8 +92,8 @@ int mult_ten(s21_decimal *a);
 int sub_for_poz(s21_decimal a, s21_decimal b, s21_decimal* result);
 s21_decimal div_int(s21_decimal a, s21_decimal b, s21_decimal* c);
 void div_ten(s21_decimal *a) ;
-void division(s21_decimal a, s21_decimal b, s21_decimal* c);
-void s21_div(s21_decimal a, s21_decimal b, s21_decimal* c);
+int division(s21_decimal a, s21_decimal b, big_decimal* c);
+int s21_div(s21_decimal a, s21_decimal b, s21_decimal* c);
 int s21_mul(s21_decimal a, s21_decimal b, s21_decimal* c);
 void cast_scale(s21_decimal *a, s21_decimal *b);
 int s21_mod(s21_decimal value_1, s21_decimal value_2, s21_decimal *result);
@@ -118,6 +118,8 @@ int s21_from_float_to_decimal(float src, s21_decimal *dst);
 int s21_from_decimal_to_float(s21_decimal src, float *dst);
 
 big_decimal  shift_big_decimal(big_decimal* decimal, int shift);
+void normalization(big_decimal *result, short scale);
+int comparison_scale(big_decimal *num_1, big_decimal *num_2,unsigned int scale_1, unsigned int scale_2);
 int big_dec_compare(big_decimal a, big_decimal b);
 int check_max(big_decimal val_1, int scale, int sign);
 int sub_bin_big(big_decimal value_1, big_decimal value_2,
@@ -136,5 +138,13 @@ int getBitBig(big_decimal num, int i);
 void setBitBig(big_decimal* num, int i, int result);
 int div10(s21_decimal *n);
 int is_divisible_by_10(s21_decimal n);
-
+int getMajorBitBig(big_decimal num);
+int div10_overflow(big_decimal *n);
+int is_divisible_by_10_overflow(big_decimal n);
+int find_down(big_decimal res, big_decimal celoe);
+void upscale(big_decimal *v1, int diff1);
+big_decimal bin_div(big_decimal v1, big_decimal v2);
+int s21_abs(int number);
+int is_overflowed(big_decimal *number);
+int find_scale(big_decimal res, big_decimal celoe);
 #endif  //  SRC_S21_DECIMAL_H_

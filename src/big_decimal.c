@@ -1,14 +1,16 @@
 #include "s21_decimal.h"
 
 int big_dec_compare(big_decimal a, big_decimal b) {
-    int f = EQUAL;
-    for (int i = 32*6-1; i >=0 && !f; i--){
-        if (getBitBig(a,i) != getBitBig(b,i)) {
-            if (getBitBig(a,i) < getBitBig(b,i)) f = LESS;
-            else f = BIG;
-        }
+  int f = EQUAL;
+  for (int i = 32 * 6 - 1; i >= 0 && !f; i--) {
+    if (getBitBig(a, i) != getBitBig(b, i)) {
+      if (getBitBig(a, i) < getBitBig(b, i))
+        f = LESS;
+      else
+        f = BIG;
     }
-    return f;    
+  }
+  return f;
 }
 
 int check_max(big_decimal val_1, int scale, int sign) {
@@ -23,8 +25,7 @@ int check_max(big_decimal val_1, int scale, int sign) {
   return err;
 }
 
-int sub_bin_big(big_decimal value_1, big_decimal value_2,
-                         big_decimal *result) {
+int sub_bin_big(big_decimal value_1, big_decimal value_2, big_decimal *result) {
   int err;
   big_decimal zer;
   big_init(&zer);
@@ -58,13 +59,13 @@ int div10_big_dec(big_decimal *n) {
   return mod;
 }
 
-void big_init(big_decimal * val) {
-  val -> bits[0] = 0;
-  val -> bits[1] = 0;
-  val -> bits[2] = 0;
-  val -> bits[3] = 0;
-  val -> bits[4] = 0;
-  val -> bits[5] = 0;
+void big_init(big_decimal *val) {
+  val->bits[0] = 0;
+  val->bits[1] = 0;
+  val->bits[2] = 0;
+  val->bits[3] = 0;
+  val->bits[4] = 0;
+  val->bits[5] = 0;
 }
 void bank_round(big_decimal value, big_decimal *result) {
   if (result) {
@@ -86,29 +87,29 @@ void bank_round(big_decimal value, big_decimal *result) {
 }
 
 void sub_bits_big(big_decimal a, big_decimal b, big_decimal *c) {
-    int bitA, bitB, tmp = 0;
-    for (int i = 0; i < 6*32; i++) {
-        bitA = getBitBig(a, i);
-        bitB = getBitBig(b, i);
-        if (bitA == 1 && bitB == 0) {
-            if (tmp == 0)
-                setBitBig(c, i, 1);
-            else
-                setBitBig(c, i, 0), tmp = 0;
-        }
-        if ((bitA == 1 && bitB == 1) || (bitA == 0 && bitB == 0)) {
-            if (tmp == 0)
-               setBitBig(c, i, 0);
-            else
-               setBitBig(c, i, 1);
-        }
-        if (bitA == 0 && bitB == 1) {
-            if (tmp == 0)
-                setBitBig(c, i, 1), tmp = 1;
-            else
-                setBitBig(c, i, 0);
-        }
+  int bitA, bitB, tmp = 0;
+  for (int i = 0; i < 6 * 32; i++) {
+    bitA = getBitBig(a, i);
+    bitB = getBitBig(b, i);
+    if (bitA == 1 && bitB == 0) {
+      if (tmp == 0)
+        setBitBig(c, i, 1);
+      else
+        setBitBig(c, i, 0), tmp = 0;
     }
+    if ((bitA == 1 && bitB == 1) || (bitA == 0 && bitB == 0)) {
+      if (tmp == 0)
+        setBitBig(c, i, 0);
+      else
+        setBitBig(c, i, 1);
+    }
+    if (bitA == 0 && bitB == 1) {
+      if (tmp == 0)
+        setBitBig(c, i, 1), tmp = 1;
+      else
+        setBitBig(c, i, 0);
+    }
+  }
 }
 
 void mod10(big_decimal value, big_decimal *mod) {
@@ -120,46 +121,46 @@ void mod10(big_decimal value, big_decimal *mod) {
     sub_bin_big(value, tmp, mod);
   }
 }
-big_decimal big_mult(big_decimal value_1,
-                              big_decimal value_2) {
+big_decimal big_mult(big_decimal value_1, big_decimal value_2) {
   big_decimal tmp = {{0, 0, 0, 0, 0, 0}};
   big_decimal res = {{0, 0, 0, 0, 0, 0}};
-  for (int i = 0; i < 192; i++) {
+  big_decimal b = value_2;
+  for (int i = 0; i < 6 * 32; i++) {
     if (getBitBig(value_1, i)) {
       big_init(&tmp);
       tmp = res;
-      addBinBig(tmp, shift_big_decimal(&value_2, 1), &res);//мб нужно двигать обратно, то есть -i
+      addBinBig(tmp, shift_big_decimal(&value_2, i), &res);
+      value_2 = b;
     }
   }
   return res;
 }
-
-int addBinBig(big_decimal value_1, big_decimal value_2,
-                 big_decimal *result) {
+int addBinBig(big_decimal value_1, big_decimal value_2, big_decimal *result) {
   short error = 0, tmp = 0;
   int term1, term2;
   big_init(result);
   for (int j = 0; j < 6; j++) {
     for (int i = 0; i < 32; i++) {
-      term1 = getBitBig(value_1, i * j);
-      term2 = getBitBig(value_2, i * j);
+      term1 = getBitBig(value_1, j * 32 + i);
+      term2 = getBitBig(value_2, j * 32 + i);
       if (term1 && term2) {
         if (tmp) {
-          setBitBig(result, i * j, 1);
+          setBitBig(result, j * 32 + i, 1);
         } else {
           tmp = 1;
         }
       } else if (term1 ^ term2) {
         if (!tmp) {
-          setBitBig(result, i * j, 1);
+          setBitBig(result, j * 32 + i, 1);
         }
       } else if (tmp) {
-        setBitBig(result, i * j, 1);
+        setBitBig(result, j * 32 + i, 1);
         tmp = 0;
       }
     }
     if (tmp && j == 5) error = 1;
   }
+
   return error;
 }
 int div10(s21_decimal *n) {
@@ -172,8 +173,46 @@ int div10(s21_decimal *n) {
   }
   return mod;
 }
-
+int div10_overflow(big_decimal *n) {
+  unsigned int mod = 0;
+  long long int tmp;
+  for (int i = 5; i >= 0; --i) {
+    tmp = (unsigned)n->bits[i] + ((long long)(mod) << 32);
+    mod = tmp % 10;
+    n->bits[i] = tmp / 10;
+  }
+  return mod;
+}
 int is_divisible_by_10(s21_decimal n) {
   s21_decimal tmp = n;
   return !div10(&tmp);
+}
+int is_divisible_by_10_overflow(big_decimal n) {
+  big_decimal tmp = {0};
+  tmp = n;
+  return !div10_overflow(&tmp);
+}
+int is_overflowed(big_decimal *number) {
+  return (number->bits[3] || number->bits[4] || number->bits[5]);
+}
+int comparison_scale(big_decimal *num_1, big_decimal *num_2,
+                     unsigned int scale_1, unsigned int scale_2) {
+  int flag = 0;
+  if (scale_1 > scale_2) {
+    normalization(num_2, scale_1 - scale_2);
+    flag = scale_2 = scale_1;
+  } else if (scale_1 < scale_2) {
+    normalization(num_1, scale_2 - scale_1);
+    flag = scale_1 = scale_2;
+  } else {
+    flag = scale_1;
+  }
+  return flag;
+}
+
+void normalization(big_decimal *result, short scale) {
+  big_decimal ten = {{10, 0, 0, 0, 0, 0}};
+  for (int i = 0; i < scale; i++) {
+    *result = big_mult(*result, ten);
+  }
 }
